@@ -42,7 +42,7 @@ function handleEvent(event) {
     return Promise.resolve(null);
   }
 
-  const completion = await openai.createCompletion({
+  const completion = openai.createCompletion({
     model: "text-davinci-003",
     prompt: event.message.text ,
     max_tokens: 200,
