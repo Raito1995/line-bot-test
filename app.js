@@ -36,13 +36,13 @@ app.post('/callback', line.middleware(config), (req, res) => {
 });
 
 // event handler
-function handleEvent(event) {
+async function handleEvent(event) {
   if (event.type !== 'message' || event.message.type !== 'text') {
     // ignore non-text-message event
     return Promise.resolve(null);
   }
 
-  const completion = openai.createCompletion({
+  const completion = await openai.createCompletion({
     model: "text-davinci-003",
     prompt: event.message.text ,
     max_tokens: 200,
