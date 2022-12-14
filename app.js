@@ -41,17 +41,21 @@ async function handleEvent(event) {
     // ignore non-text-message event
     return Promise.resolve(null);
   }
+
   const completion = await openai.createCompletion({
     model: "text-davinci-003",
     prompt: event.message.text ,
     max_tokens: 512,
   });
+  
   if(event.message.text[0] === "!") {
     echo = { type: 'text', text: completion.data.choices[0].text.trim() };
+
+    // use reply API
+    return client.replyMessage(event.replyToken, echo);
   }
 
-  // use reply API
-  return client.replyMessage(event.replyToken, echo);
+
 }
 
 // listen on port
