@@ -41,18 +41,28 @@ async function handleEvent(event) {
     // ignore non-text-message event
     return Promise.resolve(null);
   }
-
-  const completion = await openai.createCompletion({
-    model: "text-davinci-003",
-    prompt: event.message.text ,
-    max_tokens: 500,
-  });
-
-  // create a echoing text message
-  const echo = { type: 'text', text: completion.data.choices[0].text.trim() };
-
-  // use reply API
-  return client.replyMessage(event.replyToken, echo);
+  let echo;
+  if(event.message.text[0] === "!") {
+      const response = await openai.createImage({
+          prompt: event.message.text.substr(1),
+          n: 1,
+          size: "1024x1024",
+      });
+      const image_url = response.data.data[0].url;
+      echo = { 
+          type: 'image', 
+          originalContentUrl: image_url,
+          previewImageUrl: image_url
+     };
+  }
+  else {
+      const completion = await openai.createCompletion({
+          model: "text-davinci-003",
+          prompt: event.message.text ,
+          max_tokens: 500,
+      });
+      echo = { type: 'text', text: completion.data.choices[0].text.trim() };
+  }
 }
 
 // listen on port
