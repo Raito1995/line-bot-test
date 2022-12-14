@@ -1,5 +1,3 @@
-'use strict';
-
 require('dotenv').config();
 
 const express = require('express');
@@ -27,9 +25,7 @@ const app = express();
 
 // register a webhook handler with middleware
 // about the middleware, please refer to doc
-app.use('/webhook', line.middleware(config));
-
-app.post('/webhook', (req, res) => {
+app.post('/webhook', line.middleware(config), (req, res) => {
   Promise
     .all(req.body.events.map(handleEvent))
     .then((result) => res.json(result))
@@ -39,7 +35,6 @@ app.post('/webhook', (req, res) => {
     });
 });
 
-
 // event handler
 async function handleEvent(event) {
   if (event.type !== 'message' || event.message.type !== 'text') {
@@ -47,21 +42,11 @@ async function handleEvent(event) {
     return Promise.resolve(null);
   }
 
-  try {
-    const completion = await openai.createCompletion({
-      model: "text-davinci-003",
-      prompt: event.message.text ,
-      max_tokens: 500,
-    });
-    console.log(completion.data.choices[0].text);
-  } catch (error) {
-    if (error.response) {
-      console.log(error.response.status);
-      console.log(error.response.data);
-    } else {
-      console.log(error.message);
-    }
-  }
+  const completion = await openai.createCompletion({
+    model: "text-davinci-003",
+    prompt: event.message.text ,
+    max_tokens: 500,
+  });
 
   // create a echoing text message
   const echo = { type: 'text', text: completion.data.choices[0].text.trim() };
