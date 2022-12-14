@@ -47,11 +47,21 @@ async function handleEvent(event) {
     return Promise.resolve(null);
   }
 
-  const completion = await openai.createCompletion({
-    model: "text-davinci-003",
-    prompt: event.message.text ,
-    max_tokens: 500,
-  });
+  try {
+    const completion = await openai.createCompletion({
+      model: "text-davinci-003",
+      prompt: event.message.text ,
+      max_tokens: 500,
+    });
+    console.log(completion.data.choices[0].text);
+  } catch (error) {
+    if (error.response) {
+      console.log(error.response.status);
+      console.log(error.response.data);
+    } else {
+      console.log(error.message);
+    }
+  }
 
   // create a echoing text message
   const echo = { type: 'text', text: completion.data.choices[0].text.trim() };
