@@ -1,3 +1,5 @@
+'use strict';
+
 require('dotenv').config();
 
 const express = require('express');
@@ -25,7 +27,7 @@ const app = express();
 
 // register a webhook handler with middleware
 // about the middleware, please refer to doc
-app.post('/callback', line.middleware(config), (req, res) => {
+app.post('/webhook', line.middleware(config), (req, res) => {
   Promise
     .all(req.body.events.map(handleEvent))
     .then((result) => res.json(result))
@@ -34,6 +36,7 @@ app.post('/callback', line.middleware(config), (req, res) => {
       res.status(500).end();
     });
 });
+
 
 // event handler
 async function handleEvent(event) {
