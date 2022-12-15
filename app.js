@@ -46,9 +46,7 @@ async function handleEvent(event) {
     model: "text-davinci-003",
     prompt: event.message.text ,
     temperature: 0.9,
-    presence_penalty: 0.5,
-    frequency_penalty: 0.5,
-    max_tokens: 4096,
+    max_tokens: 512,
   });
 
   if(event.message.text[0] === "!") {
