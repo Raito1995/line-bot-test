@@ -45,6 +45,9 @@ async function handleEvent(event) {
   const completion = await openai.createCompletion({
     model: "text-davinci-003",
     prompt: event.message.text ,
+    temperature: 0.8,
+    presence_penalty: 1,
+    frequency_penalty: 1,
     max_tokens: 128,
   });
 
