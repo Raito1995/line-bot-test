@@ -45,10 +45,10 @@ async function handleEvent(event) {
   const completion = await openai.createCompletion({
     model: "text-davinci-003",
     prompt: event.message.text ,
-    temperature: 0.8,
-    presence_penalty: 1,
-    frequency_penalty: 1,
-    max_tokens: 128,
+    temperature: 0.9,
+    presence_penalty: 0.5,
+    frequency_penalty: 0.5,
+    max_tokens: 4096,
   });
 
   if(event.message.text[0] === "!") {
@@ -57,8 +57,6 @@ async function handleEvent(event) {
     // use reply API
     return client.replyMessage(event.replyToken, echo);
   }
-
-
 }
 
 // listen on port
