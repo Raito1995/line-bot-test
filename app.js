@@ -55,6 +55,8 @@ async function handleEvent(event) {
     echo = { type: 'text', text: completion.data.choices[0].text.trim() };
 
     // use reply API
+    console.log(echo);
+    console.log(client.replyMessage(event.replyToken, echo));
     return client.replyMessage(event.replyToken, echo);
   }
 }
